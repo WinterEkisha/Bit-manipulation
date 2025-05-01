@@ -79,7 +79,7 @@ int main()
               << "long as decimal: " << copy
               << "\nafter calculation: " << i
               << "\nas binary: " << z
-              << "\n           " << x;
+              << "\n           " << x
               << "\n";
 
     return 0;
