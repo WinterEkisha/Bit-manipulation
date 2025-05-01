@@ -80,10 +80,7 @@ int main()
               << "\nafter calculation: " << i
               << "\nas binary: " << z
               << "\n           " << x;
-
-
-    
-    std::cout << "\n";
+              << "\n";
 
     return 0;
 }
