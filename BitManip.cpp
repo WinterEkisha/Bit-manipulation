@@ -82,13 +82,13 @@ char askUserInput(float &flt, float &calculator) {
     if (chr == 'a' || chr == 'A') {
         std::cout << "Number to Multiply: ";
         std::cin >> flt;
-        std::cout << "Multiplier (calculated as num * 2^multi): ";
+        std::cout << "Multiplier (WIP: calculated as num * 2^multi): ";
         std::cin >> calculator;
     }
     else if (chr == 'b' || chr == 'B') {
         std::cout << "Number to Divide: ";
         std::cin >> flt;
-        std::cout << "Divisor (calculated as num / 2^div): ";
+        std::cout << "Divisor (WIP: calculated as num / 2^div): ";
         std::cin >> calculator;
         calculator *= -1;
     }
