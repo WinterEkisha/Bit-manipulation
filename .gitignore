@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+/.vs
+/BitManipNimsCopy/x64/Debug
+/x64/Debug
+*.sln
+*.vcxproj
+*.filters
+*.user

@@ -92,7 +92,7 @@ char askUserInput(float& flt, float& calculator) {
         std::cin >> calculator;
         calculator *= -1;
     }
-    else {
+    else if (chr == 'c' || chr == 'C') {
         std::cout << "Number to squareroot (aprox. with ~1.04% accuracy): ";
         std::cin >> flt;
         calculator = 0;
@@ -191,24 +191,33 @@ void squareRootBin(float& result) {
 }
 
 int main() {
-    float flt = 4.5F, target, result, calculator;
+    float flt, target, result, calculator = 4.5F;
 
     //long i, copy; //used for testing (old)
 
-    char method = askUserInput(flt, calculator);
-    result = flt;
+    bool done = false;
+    while (!done) {
+        char method = askUserInput(flt, calculator);
+        result = flt;
 
-    if (method == 'a' || method == 'A') {
-        target = flt * calculator;
-        divMulti(result, calculator);
-    }
-    else if (method == 'b' || method == 'B') {
-        target = flt / calculator;
-        divMulti(result, calculator);
-    }
-    else {
-        target = sqrt(flt); //accurate calculation for testing purposes
-        squareRootBin(result);  //approximation of square root
+        if (method == 'a' || method == 'A') {
+            target = flt * calculator;
+            divMulti(result, calculator);
+            done = true;
+        }
+        else if (method == 'b' || method == 'B') {
+            target = flt / calculator;
+            divMulti(result, calculator);
+            done = true;
+        }
+        else if (method == 'c' || method == 'C') {
+            target = sqrt(flt); //accurate calculation for testing purposes
+            squareRootBin(result);  //approximation of square root
+            done = true;
+        }
+        else {
+            std::cout << "That is not a valid option. Please try again!\n";
+        }
     }
 
     printBin(flt, target, result);
