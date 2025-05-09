@@ -5,6 +5,7 @@
 #include <string>
 #include <inttypes.h>
 #include <cmath>
+#include <iomanip>
 
 void floatToBinary(float f, std::string& str) //code from stack overflow
 {
@@ -25,7 +26,7 @@ void floatToBinary(float f, std::string& str) //code from stack overflow
     str = temp;
 }
 
-void longToBinary(long x, std::string &str) {
+void longToBinary(long x, std::string& str) {
     for (int i = 0; i < 32; i++) {
         if (x % 2) str.push_back('1');
         else str.push_back('0');
@@ -36,7 +37,7 @@ void longToBinary(long x, std::string &str) {
 }
 
 //calculate the decimal number of a binary number
-void binToDecimal(std::string &str) {
+void binToDecimal(std::string& str) {
     int temp = 0;
     for (int i = 0; i < str.size(); i++) {
         if (str[i] == '1') { temp <<= 1; temp++; }
@@ -45,7 +46,7 @@ void binToDecimal(std::string &str) {
     str = std::to_string(temp);
 }
 
-void floatInfo(std::string bin, std::string &str) {
+void floatInfo(std::string bin, std::string& str) {
     int i = 0;
     std::string temp;
     if (bin[i] == '1') str += "negative\n"; else str += "positive\n"; i += 2;
@@ -68,11 +69,10 @@ void floatInfo(std::string bin, std::string &str) {
 
 }
 
-void binToLong(long x, std::string bin) { //TODO: finish
-    std::cout << "fix: binToLong\n";
+void binToLong(long x, std::string bin) { //TODO: finish //unnecessary 
 }
 
-char askUserInput(float &flt, float &calculator) {
+char askUserInput(float& flt, float& calculator) {
     char chr;
     std::cout << "Select a calculation\n"
         << "(a) Multiply\n"
@@ -93,16 +93,16 @@ char askUserInput(float &flt, float &calculator) {
         calculator *= -1;
     }
     else {
-        std::cout << "Number to squareroot (very inaccurate aprox.): ";
+        std::cout << "Number to squareroot (aprox. with ~1.04% accuracy): ";
         std::cin >> flt;
         calculator = 0;
     }
-    
+
     return chr;
 }
 
 //used for making the binary information easier to see
-void spaceBin(std::string &str) {
+void spaceBin(std::string& str) {
     std::string temp;
     for (int i = 0; i < 32; i++) {
         if (i == 1 || i == 9) temp = temp + ' ';
@@ -111,7 +111,7 @@ void spaceBin(std::string &str) {
     str = temp;
 }
 
-//used for testing purposes
+//used for testing purposes (old)
 void printBin(float flt, float target, float result, long i, long copy) {
     std::string x, z;
     std::string f, t, r;
@@ -144,15 +144,16 @@ void printBin(float flt, float target, float result) {
     floatToBinary(flt, f); floatToBinary(target, t); floatToBinary(result, r);
     //longToBinary(i, x); longToBinary(copy, z);
     spaceBin(f); spaceBin(r); spaceBin(t); //spaceBin(x); spaceBin(z);
-    std::cout << "starting float: " << flt
-        << "\nbinary for float: " << f
-        << "\n\n"
-        << "target float: " << target
-        << "\nbinary for float: " << t
-        << "\n\n"
-        << "resulting float: " << result
-        << "\nbinary for result: " << r
-        << "\n";
+    std::cout << std::fixed << std::setprecision(10)
+	<< "starting float: " << flt
+	<< "\nbinary for float: " << f
+	<< "\n\n"
+	<< "target float: " << target
+	<< "\nbinary for float: " << t
+	<< "\n\n"
+	<< "resulting float: " << result
+	<< "\nbinary for result: " << r
+	<< "\n";
 }
 
 // negative for devide, positive for multi, also does num */ 2^multi
@@ -169,16 +170,27 @@ void divMulti(float& flt, float multi) {
 
 }
 
-//TODO: figure this out //approximation of square root
-void squareRootBin(float &result){ 
+//approximation of square root by bit manipulation
+void squareRootBin(float& result) {
     long i;
-    i = *(long*) &result;
+    i = *(long*)&result;
     i = i >> 1;
-    i += 536870912; //correction magic number (not finished)
-    result = *(float*) &i;
+    i += 531956979; //correction magic number
+	//how it works:
+	// >> 1 divides both exponent and mantissa by 2
+	// 528482304 + 3474675 adds back the bias (127) since it is unaffected by the bit shift dividing by two
+	// 528482304 is the exponent part of the correction(63.5)
+	// which was made to add 63 to the exponent
+	// which is the closest correction you could get to the (63.5) on the exponent alone
+	// 3474675 is the binary for sqrt(2) (1.01101010000010011110011) but without the decimal
+	// which is then added to the mantissa since the 0.5 is what is left in the exponent
+	// x^0.5 is sqrt(x), and this is binary so x = 2
+	// you add sqrt(2) to the mantissa since its equivlant to adding 0.5 to the exponent
+	// i still dont KNOW why, but i kind of guessed that that's what it was supposed to be and it worked
+    result = *(float*)&i;
 }
 
-int main(){
+int main() {
     float flt = 4.5F, target, result, calculator;
 
     //long i, copy; //used for testing (old)
